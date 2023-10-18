@@ -4,7 +4,7 @@ class IphoneScreen:
     """Creates a GUI allowing for account system with login and registration capabilities!"""
     def __init__(self) -> None:
         self.root = Tk()
-        self.root.title('Home Page')
+        self.root.title('Iphone screen')
         self.root.geometry('315x650')
         self.root.config(bg='light blue')
         self.font = ('Times New Roman', 14)
