@@ -2,7 +2,7 @@ from tkinter import Tk, Label, Frame, Button, Entry, W, PhotoImage
 from tkmacosx import Button as BUTTON
 
 class HomePage:
-    """Creates a GUI allowing for account system with login and registration capabilities!"""
+    """Creates a GUI system for the Foodie Findz APP (prototype)"""
     def __init__(self) -> None:
         self.root = Tk()
         self.root.title('Home Page')
