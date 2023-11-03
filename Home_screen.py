@@ -1,5 +1,6 @@
 from tkinter import Tk, Label, Frame, Button, Entry, W, PhotoImage
 from tkmacosx import Button as BUTTON
+from Recipe_Finder import RecipeFinder, API
 
 class HomePage:
     """Creates a GUI system for the Foodie Findz APP (prototype)"""
@@ -30,7 +31,7 @@ class HomePage:
             acounts_btn.place(x=0, y=0, width=50, height=50)
             
             recipe_btn = BUTTON(self.root, text='recipe', font=self.font, bg="Turquoise", command=self.recipe)
-            recipe_btn.place(x=0, y=0, width=50, height=50)
+            recipe_btn.place(x=225, y=300, width=50, height=50)
         
             
             self.place_exit_btn()      
@@ -45,7 +46,8 @@ class HomePage:
         print("open account system")
         
     def recipe(self) -> None:
-        print("open recipe system")
+        recipe_page = RecipeFinder()
+        recipe_page.root.mainloop()
         
     def clear_root(self) -> None:
         for widget in self.root.winfo_children():

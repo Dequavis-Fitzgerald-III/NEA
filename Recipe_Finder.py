@@ -2,7 +2,7 @@ from tkinter import Tk, Label, Frame, Button, Entry, W, PhotoImage
 from tkmacosx import Button as BUTTON
 from requests import get
 from pprint import pprint
-import json
+from json import dumps
 
 class RecipeFinder:
     """Creates a GUI that connects to a Spoonacular API to recieve recipes and information."""
@@ -50,7 +50,7 @@ class API:
     def ID_search(self, ID) -> None:
         url = f"https://api.spoonacular.com/recipes/{ID}/information?apiKey={self.API_KEY}"
         r = get(url)
-        self.ID_parse(r.json())
+        self.ID_parse(dumps(r.json()))
         
     # parses:
     def recipe_parse(self, r) -> None:
