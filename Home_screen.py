@@ -1,6 +1,4 @@
-from tkinter import Tk, Label, Frame, Button, Entry, W, PhotoImage, CENTER
-from tkmacosx import Button as BUTTON
-from Recipe_Finder import RecipeFinder
+from tkinter import Tk, Label, Frame, Button, CENTER
 from PIL import ImageTk, Image
 
 
@@ -20,6 +18,7 @@ class HomePage:
         self.home_page_creation()
         
     def home_page_creation(self) -> None:
+            """Creates all widgets for the home page GUI"""
             #Frames:
             home_frame = Frame(self.root, bd=2, bg='light blue', padx=0, pady=0)
             home_frame.place(x=-2.5, y=-2.5, width=self.SCREENWIDTH, height=(5 * self.SCREENHEIGHT /13))
@@ -41,39 +40,44 @@ class HomePage:
             menu_btn = Button(self.root, image=self.menu_icon, command=self.menu)
             menu_btn.place(x=0, y=0, width=(self.SCREENWIDTH / 8), height=(self.SCREENWIDTH / 8))
             
-            search_btn = BUTTON(self.root, image=self.search_icon, command=self.search)
+            search_btn = Button(self.root, image=self.search_icon, command=self.search)
             search_btn.place(x=(self.SCREENWIDTH - self.SCREENWIDTH / 8), y=0, width=(self.SCREENWIDTH / 8), height=(self.SCREENWIDTH / 8))
             
-            acounts_btn = BUTTON(accounts_frame, text='accounts', font=self.font, bg="Turquoise", command=self.account)
+            acounts_btn = Button(accounts_frame, text='accounts', font=self.font, bg="Turquoise", command=self.account)
             acounts_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
             
-            recipe_btn = BUTTON(recipe_frame, text='recipe', font=self.font, bg="Turquoise", command=self.recipe)
+            recipe_btn = Button(recipe_frame, text='recipe', font=self.font, bg="Turquoise", command=self.recipe)
             recipe_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
         
-            unknown_btn = BUTTON(unknown_frame, text='?', font=self.font, bg="Turquoise", command=self.recipe)
+            unknown_btn = Button(unknown_frame, text='?', font=self.font, bg="Turquoise", command=self.recipe)
             unknown_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
             
             self.place_exit_btn()      
     
     def menu(self) -> None:
+        """opens the menu bar at the top left of the home page"""
         print("open menu")
         
     def search(self) -> None:
+        """Opens the search bar at the top of the home page"""
         print("open search bar")
         
     def account(self) -> None:
+        """Opens the accounts system"""
         print("open account system")
         
     def recipe(self) -> None:
-        recipe_page = RecipeFinder()
-        recipe_page.root.mainloop()
+        """Opens the recipe finder system"""
+        print("open recipe finder system")
         
     def clear_root(self) -> None:
+        """Clears all widgets"""
         for widget in self.root.winfo_children():
             widget.destroy()
     
     def place_exit_btn(self) -> None:
-        exit_btn = BUTTON(self.root, text='EXIT', font=('Times New Roman', 50), bg="Turquoise", command=self.root.destroy)
+        """Places an exit button"""
+        exit_btn = Button(self.root, text='EXIT', font=('Times New Roman', 50), bg="Turquoise", command=self.root.destroy)
         exit_btn.place(x=200, y=600, width=200, height=50)
         
 if __name__ == "__main__":
