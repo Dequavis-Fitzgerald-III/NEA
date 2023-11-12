@@ -13,22 +13,22 @@ class RecipeFinder:
         self.root.geometry('400x650')
         self.root.config(bg='light blue')
         self.font = ('Times New Roman', 14)
-        self.API = API()
+        self.API = API(self)
         self.recipe_page_creation()
         
     def recipe_page_creation(self) -> None:
-            """Creates all widgets for the reciope page GUI"""
-            search_frame = Frame(self.root, bd=2, bg='light blue', padx=0, pady=0)
-            self.query_entry = Entry(search_frame, font=self.font)
-            self.cuisine_entry = Entry(search_frame, font=self.font)
-            self.ingredients_entry = Entry(search_frame, font=self.font)
-            self.query_entry.grid(row=0, column=1, pady=5, padx=10)
-            self.cuisine_entry.grid(row=1, column=1, pady=5, padx=10)
-            self.ingredients_entry.grid(row=2, column=1, pady=5, padx=10)
-            enter_btn = Button(search_frame, text='search', bg="Turquoise", font=self.font, command=self.API.query_search)
-            enter_btn.grid(row=3, column=1, pady=10, padx=10)
-            search_frame.place(x=0, y=150, width=500, height=225)
-            self.place_exit_btn()   
+        """Creates all widgets for the reciope page GUI"""
+        search_frame = Frame(self.root, bd=2, bg='light blue', padx=0, pady=0)
+        self.query_entry = Entry(search_frame, font=self.font)
+        self.cuisine_entry = Entry(search_frame, font=self.font)
+        self.ingredients_entry = Entry(search_frame, font=self.font)
+        self.query_entry.grid(row=0, column=1, pady=5, padx=10)
+        self.cuisine_entry.grid(row=1, column=1, pady=5, padx=10)
+        self.ingredients_entry.grid(row=2, column=1, pady=5, padx=10)
+        enter_btn = Button(search_frame, text='search', bg="Turquoise", font=self.font, command=self.API.query_search)
+        enter_btn.grid(row=3, column=1, pady=10, padx=10)
+        search_frame.place(x=0, y=150, width=500, height=225)
+        self.place_exit_btn()   
     
     def visualise(self, url, steps_string) -> None:
         """Visualizes results returned from a Spoonacular API request"""
@@ -56,12 +56,13 @@ class RecipeFinder:
 
 class API:
     """connects to the Spoonacular API to search for and parse data on recipes."""
-    def __init__(self) -> None:
+    def __init__(self, recipe_page) -> None:
         self.API_KEY = "c5d172e74d5e4f40a01fc6f6e824969c"
+        self.recipe_page = recipe_page
     
     # searches:
     def query_search(self) -> None:
-        url = f"https://api.spoonacular.com/recipes/complexSearch?apiKey={self.API_KEY}&query={recipe_page.query_entry.get()}&cuisine={recipe_page.cuisine_entry.get()}&includeIngredients={recipe_page.ingredients_entry.get()}"
+        url = f"https://api.spoonacular.com/recipes/complexSearch?apiKey={self.API_KEY}&query={self.recipe_page.query_entry.get()}&cuisine={self.recipe_page.cuisine_entry.get()}&includeIngredients={self.recipe_page.ingredients_entry.get()}"
         r = get(url)
         self.recipe_parse(r.json())
     
@@ -85,7 +86,7 @@ class API:
             steps_string += f"{i+1}){step['step']} \n"
         print(r['image'])
         url = get(r['image'])
-        recipe_page.visualise(url, steps_string)
+        self.recipe_page.visualise(url, steps_string)
     
         
 if __name__ == "__main__":
