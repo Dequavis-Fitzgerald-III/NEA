@@ -1,13 +1,22 @@
-from tkinter import Tk, Label, Frame, Button, Entry, W
+from tkinter import Tk, Label, Frame, Button, Entry, W, CENTER
+from os import name as os_name
 
 class AccountSystem:
     """Creates a GUI allowing for account system with login and registration capabilities!"""
     def __init__(self) -> None:
         self.root = Tk()
         self.root.title('Account System')
-        self.root.geometry('500x450')
+        self.screenwidth: int = 400
+        self.screenheight: int = 650
+        self.root.geometry(f'{self.screenwidth}x{self.screenheight}')
         self.root.config(bg='Gray')
         self.font = ('Times New Roman', 14)
+        self.current = self.account_management_window
+        if os_name == "nt":
+            self.serial_check = 13
+        else: 
+            self.serial_check = 273
+        self.root.bind("<Configure>", self.resized)
         self.account_management_window()
 
     def close(self):
@@ -20,45 +29,40 @@ class AccountSystem:
 
     def place_exit_btn(self) -> None:
         exit_btn = Button(self.root, text='EXIT', font=self.font, bg="Turquoise", command=self.close)
-        exit_btn.place(x=300, y=400, width=200, height=50)
+        exit_btn.place(x=self.screenwidth-50, y=self.screenheight - 50, width=50, height=50)
     
-    def place_return_btn(self, frame_input) -> None:
-        return_btn = Button(frame_input, text='Return', font=self.font, bg="Turquoise", command=lambda:[self.clear_root(), self.account_management_window()])
-        return_btn.place(x=0, y=125, width=150, height=75)
     
     def account_management_window(self) -> None:
+        self.current = self.account_management_window
         title_label =Label(self.root, text="Account Manager", bg="Turquoise", font=('Times New Roman', 50))
-        title_label.place(x=45, y=50, width=390, height=100)
+        title_label.place(relx=0.5, rely=0.07, anchor=CENTER)
 
+        options_frame = Frame(self.root, bg='light gray')
+        
         # buttons
-        login_btn = Button(self.root, text='Login', font=self.font, bg="Turquoise", command=self.login_window)
-        login_btn.place(x=60, y=175, width=360, height=100)
-
-        register_btn = Button(self.root, text='Register', font=self.font, bg="Turquoise", command=self.register_window)
-        register_btn.place(x=60, y=275, width=360, height=100)
-        self.place_exit_btn()       
+        Button(options_frame, text='Login', font=self.font, bg="Turquoise", command=self.login_window).grid(row=0, column=0)
+        Button(options_frame, text='Register', font=self.font, bg="Turquoise", command=self.register_window).grid(row=1, column=0)
+        
+        options_frame.place(relx=0.5, rely=0.5, width=self.screenwidth/2, height=self.screenheight/6, anchor=CENTER)
+        self.place_exit_btn()
 
     def login_window(self):
+        self.current = self.login_window
         self.clear_root()
-        login_frame = Frame(self.root, bd=2, bg='light gray', padx=12, pady=10)
-        Label(login_frame, text="Enter login details", bg='light gray', font=('Times New Roman', 50)).grid(padx=10,
-                                                                                        pady=10)
-        login_frame.place(x=0, y=0, width=500, height=100)
-        Login_frame = Frame(self.root, bd=2, bg='light gray', padx=10, pady=10)
-        Label(Login_frame, text="Enter Name", bg='light gray', font=self.font).grid(row=0, column=0,
-                                                                            sticky=W, pady=10)
-        Label(Login_frame, text="Enter Password", bg='light gray', font=self.font).grid(row=1, column=0,
-                                                                                sticky=W,
-                                                                                pady=10)
-        Entry(Login_frame, font=self.font).grid(row=0, column=1, pady=5, padx=10)
-        Entry(Login_frame, font=self.font, show='*').grid(row=1, column=1, pady=5, padx=10)
-        enter_btn = Button(Login_frame, text='Login', bg="Turquoise", font=self.font)
-        enter_btn.grid(row=3, column=1, pady=10, padx=10)
-        Login_frame.place(x=0, y=150, width=500, height=225)
-        self.place_return_btn(Login_frame)
+        login_label = Label(self.root, text="Enter login details", bg='light gray', font=('Times New Roman', 50))
+        login_label.place(relx=0.5, rely=0.07, anchor=CENTER)
+        login_frame = Frame(self.root, bg='light gray')
+        Label(login_frame, text="Enter Name", bg='light gray', font=self.font).grid(row=0, column=0)
+        Label(login_frame, text="Enter Password", bg='light gray', font=self.font).grid(row=1, column=0)
+        Entry(login_frame, font=self.font).grid(row=0, column=1)
+        Entry(login_frame, font=self.font, show='*').grid(row=1, column=1)
+        Button(login_frame, text='Login', bg="Turquoise", font=self.font).grid(row=3, column=1)
+        Button(login_frame, text='Return', font=self.font, bg="Turquoise", command=lambda:[self.clear_root(), self.account_management_window()]).grid(row=4, column=0)
+        login_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
         self.place_exit_btn()
 
     def register_window(self):
+        self.current = self.register_window
         self.clear_root()
         register_frame = Frame(self.root, bd=2, bg='light gray', padx=4, pady=10)
         Label(register_frame, text="Register your details", bg='light gray', font=('Times New Roman', 50)).grid(
@@ -84,8 +88,15 @@ class AccountSystem:
         pwd_again.grid(row=2, column=1, pady=3, padx=12)
         enter_btn.grid(row=3, column=1, pady=5, padx=12)
         register_frame.place(x=0, y=150, width=500, height=225)
-        self.place_return_btn(register_frame)
         self.place_exit_btn()
+    
+    def resized(self, event) -> None:
+        """maintians proportions of widget placements when screen is resized"""
+        if event.widget == self.root and event.serial != self.serial_check:
+            self.screenwidth = self.root.winfo_width()
+            self.screenheight = self.root.winfo_height()
+            self.clear_root()
+            self.current()
 
 if __name__ == "__main__":
     account_system = AccountSystem()

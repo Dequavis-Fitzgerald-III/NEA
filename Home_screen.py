@@ -25,11 +25,11 @@ class HomePage:
         self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((self.screenwidth,int(5*self.screenheight/13))))
         self.menu_icon = ImageTk.PhotoImage(Image.open('VisualAssets/menu_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
         self.search_icon = ImageTk.PhotoImage(Image.open('VisualAssets/search_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
-        self.root.bind("<Configure>", self.resized)
         if os_name == "nt":
             self.serial_check = 13
         else: 
             self.serial_check = 273
+        self.root.bind("<Configure>", self.resized)
         self.root.protocol("WM_DELETE_WINDOW", self.window_exit)
         self.home_page_creation()
         
@@ -87,6 +87,7 @@ class HomePage:
         account_page.root.mainloop()
         
     def recipe(self) -> None:
+        """Opens the recipe system"""
         self.root.destroy()
         recipe_page = RecipeFinder()
         recipe_page.root.mainloop()
@@ -112,7 +113,6 @@ class HomePage:
     
     def resized(self, event) -> None:
         """maintians proportions of widget placements when screen is resized"""
-        print(event.serial)
         if event.widget == self.root and event.serial != self.serial_check:
             self.screenwidth = self.root.winfo_width()
             self.screenheight = self.root.winfo_height()
