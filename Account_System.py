@@ -8,7 +8,6 @@ class AccountSystem(Window):
     """Creates a GUI allowing for account system with login and registration capabilities!"""
     def __init__(self, name: str = "Account System", screenwidth: int = 400, screenhieght: int = 650) -> None:
         super().__init__(name, screenwidth, screenhieght)
-        self.populate_window()
     
     def populate_window(self) -> None:
         title_label =Label(self.root, text="Account Manager", bg="Turquoise", font=('Times New Roman', 50))

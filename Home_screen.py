@@ -6,6 +6,7 @@ from Recipe_Finder import RecipeFinder
 from Account_System import AccountSystem
 from Clarkes_tkinter import Window
 
+
 class HomePage(Window):
     """Creates a GUI system for the Foodie Findz APP (prototype)"""
     def __init__(self, name: str = "Home Page", screenwidth: int = 400, screenhieght: int = 650) -> None:
@@ -13,7 +14,6 @@ class HomePage(Window):
         self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((self.screenwidth,int(5*self.screenheight/13))))
         self.menu_icon = ImageTk.PhotoImage(Image.open('VisualAssets/menu_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
         self.search_icon = ImageTk.PhotoImage(Image.open('VisualAssets/search_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
-        self.populate_window()
         
     def populate_window(self) -> None:
             """Creates all widgets for the home page GUI"""
@@ -52,8 +52,13 @@ class HomePage(Window):
             unknown_btn = Button(functions_frame, text='?', font=self.font, bg="Turquoise", command=self.recipe)
             unknown_btn.place(relx=5/6, rely=0.5, anchor=CENTER)
             
-            self.place_exit_btn()      
-    
+            random_recipe1_btn= Button(random_recipes_frame, image=self.home_pic, command=self.recipe)
+            random_recipe1_btn.place(relx=2/8, rely=3/10, anchor=CENTER, width=(7*self.screenwidth/20), height=(2*((7*self.screenheight/13)-25)/6))
+            
+            random_recipe2_btn= Button(random_recipes_frame, image=self.home_pic, command=self.recipe)
+            random_recipe2_btn.place(relx=6/8, rely=7/10, anchor=CENTER, width=(7*self.screenwidth/20), height=(2*((7*self.screenheight/13)-25)/6))
+        
+            self.place_exit_btn()
     def menu(self) -> None:
         """opens the menu bar at the top left of the home page"""
         print("open menu")

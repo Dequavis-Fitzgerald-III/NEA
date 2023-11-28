@@ -17,10 +17,6 @@ class Window:
         self.root.geometry(f'{self.screenwidth}x{self.screenheight}')
         self.root.config(bg='light blue')
         self.font = ('Times New Roman', 14)
-        if os_name == "nt":
-            self.serial_check = 13
-        else: 
-            self.serial_check = 273
         self.root.bind("<Configure>", self.resized)
         self.root.protocol("WM_DELETE_WINDOW", self.window_exit)
     
@@ -45,7 +41,7 @@ class Window:
     
     def resized(self, event) -> None:
         """maintians proportions of widget placements when screen is resized"""
-        if event.widget == self.root and event.serial != self.serial_check:
+        if event.widget == self.root:
             self.screenwidth = self.root.winfo_width()
             self.screenheight = self.root.winfo_height()
             self.clear_root()

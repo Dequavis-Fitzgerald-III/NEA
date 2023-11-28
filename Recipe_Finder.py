@@ -13,7 +13,6 @@ class RecipeFinder(Window):
     def __init__(self, name: str = "Recipe Page", screenwidth: int = 400, screenhieght: int = 650) -> None:
         super().__init__(name, screenwidth, screenhieght)
         self.API = API(self)
-        self.populate_window()
         
     def populate_window(self) -> None:
         """Creates all widgets for the reciope page GUI"""
