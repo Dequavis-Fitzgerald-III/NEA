@@ -1,3 +1,5 @@
+"""recipe searching for Foodie Findz app"""
+
 from tkinter import Tk, Label, Frame, Button, Entry, W, PhotoImage, S, CENTER
 from requests import get
 from pprint import pprint

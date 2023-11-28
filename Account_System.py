@@ -1,3 +1,5 @@
+"""Account system with login and registration capabiities"""
+
 from tkinter import Tk, Label, Frame, Button, Entry, W, CENTER
 from os import name as os_name
 from Clarkes_tkinter import Window

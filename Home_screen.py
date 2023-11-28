@@ -1,6 +1,6 @@
-from tkinter import Tk, Label, Frame, Button, CENTER
-from pprint import pprint
-from os import name as os_name
+"""Home screen for Foodie Findz app"""
+
+from tkinter import Label, Frame, Button, CENTER
 from PIL import ImageTk, Image
 from Recipe_Finder import RecipeFinder
 from Account_System import AccountSystem

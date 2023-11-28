@@ -1,3 +1,5 @@
+"""Custom tkinter library for quick and easy GUI creation"""
+
 from tkinter import Tk, Button
 from os import name as os_name
 if os_name == "nt":
@@ -6,6 +8,7 @@ else:
     print("due to being on Mac OS, not all features are supported")
 
 class Window:
+    """creates a custom scalable tkinter window."""
     def __init__(self, name:str, screenwidth:int = 400, screenhieght:int = 650) -> None:
         self.root = Tk()
         self.root.title(name)
