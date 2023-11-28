@@ -4,36 +4,18 @@ from os import name as os_name
 from PIL import ImageTk, Image
 from Recipe_Finder import RecipeFinder
 from Account_System import AccountSystem
-try:
-    from messagebox import askyesno
-except ImportError:
-    print("due to being on Mac OS, not all features are supported")
+from Clarkes_tkinter import Window
 
-print(os_name)
-
-
-class HomePage:
+class HomePage(Window):
     """Creates a GUI system for the Foodie Findz APP (prototype)"""
-    def __init__(self) -> None:
-        self.root = Tk()
-        self.root.title('Home Page')
-        self.screenwidth: int = 400
-        self.screenheight: int = 650
-        self.root.geometry(f'{self.screenwidth}x{self.screenheight}')
-        self.root.config(bg='light blue')
-        self.font = ('Times New Roman', 14)
+    def __init__(self, name: str = "Home Page", screenwidth: int = 400, screenhieght: int = 650) -> None:
+        super().__init__(name, screenwidth, screenhieght)
         self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((self.screenwidth,int(5*self.screenheight/13))))
         self.menu_icon = ImageTk.PhotoImage(Image.open('VisualAssets/menu_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
         self.search_icon = ImageTk.PhotoImage(Image.open('VisualAssets/search_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
-        if os_name == "nt":
-            self.serial_check = 13
-        else: 
-            self.serial_check = 273
-        self.root.bind("<Configure>", self.resized)
-        self.root.protocol("WM_DELETE_WINDOW", self.window_exit)
-        self.home_page_creation()
+        self.populate_window()
         
-    def home_page_creation(self) -> None:
+    def populate_window(self) -> None:
             """Creates all widgets for the home page GUI"""
             #Frames:
             home_frame = Frame(self.root, bg='light blue')
@@ -92,32 +74,6 @@ class HomePage:
         recipe_page = RecipeFinder()
         recipe_page.root.mainloop()
         
-    def clear_root(self) -> None:
-        """Clears all widgets"""
-        for widget in self.root.winfo_children():
-            widget.destroy()
-    
-    def place_exit_btn(self) -> None:
-        """Places an exit button"""
-        exit_btn = Button(self.root, text='X', font=self.font, bg="Turquoise", command=self.window_exit)
-        exit_btn.place(x=self.screenwidth - 25, y=self.screenheight-25, width=25, height=25)
-    
-    def window_exit(self) -> None:
-        """Closes the window if user confirms the pop up"""
-        try:
-            close = askyesno("Exit?", "Are you sure you want to exit?")
-            if close:
-                self.root.destroy()
-        except NameError:
-            self.root.destroy()
-    
-    def resized(self, event) -> None:
-        """maintians proportions of widget placements when screen is resized"""
-        if event.widget == self.root and event.serial != self.serial_check:
-            self.screenwidth = self.root.winfo_width()
-            self.screenheight = self.root.winfo_height()
-            self.clear_root()
-            self.home_page_creation()
         
 if __name__ == "__main__":
     home_page = HomePage()

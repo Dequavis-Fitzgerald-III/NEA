@@ -4,19 +4,16 @@ from pprint import pprint
 from json import dumps, load
 from PIL import ImageTk, Image
 from io import BytesIO
+from Clarkes_tkinter import Window
 
-class RecipeFinder:
+class RecipeFinder(Window):
     """Creates a GUI that connects to a Spoonacular API to recieve recipes and information."""
-    def __init__(self) -> None:
-        self.root = Tk()
-        self.root.title('Recipe Finder')
-        self.root.geometry('400x650')
-        self.root.config(bg='light blue')
-        self.font = ('Times New Roman', 14)
+    def __init__(self, name: str = "Recipe Page", screenwidth: int = 400, screenhieght: int = 650) -> None:
+        super().__init__(name, screenwidth, screenhieght)
         self.API = API(self)
-        self.recipe_page_creation()
+        self.populate_window()
         
-    def recipe_page_creation(self) -> None:
+    def populate_window(self) -> None:
         """Creates all widgets for the reciope page GUI"""
         search_frame = Frame(self.root, bd=2, bg='light blue', padx=0, pady=0)
         self.query_entry = Entry(search_frame, font=self.font)
@@ -42,17 +39,6 @@ class RecipeFinder:
         text_label = Label(steps_frame, text=steps_string, font=self.font, wraplength=380, bg='white')
         text_label.place(relx=0.5, rely=0.5, anchor=CENTER)
         steps_frame.place(x=0, y=225, width=400, height=425)
-        
-    def clear_root(self) -> None:
-        """Clears all widgets"""
-        for widget in self.root.winfo_children():
-            widget.destroy()
-    
-    def place_exit_btn(self) -> None:
-        """Places an exit button"""
-        exit_btn = Button(self.root, text='EXIT', font=('Times New Roman', 50), bg="Turquoise", command=self.root.destroy)
-        exit_btn.place(x=200, y=600, width=200, height=50)
-    
 
 class API:
     """connects to the Spoonacular API to search for and parse data on recipes."""

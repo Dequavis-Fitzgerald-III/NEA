@@ -1,39 +1,14 @@
 from tkinter import Tk, Label, Frame, Button, Entry, W, CENTER
 from os import name as os_name
+from Clarkes_tkinter import Window
 
-class AccountSystem:
+class AccountSystem(Window):
     """Creates a GUI allowing for account system with login and registration capabilities!"""
-    def __init__(self) -> None:
-        self.root = Tk()
-        self.root.title('Account System')
-        self.screenwidth: int = 400
-        self.screenheight: int = 650
-        self.root.geometry(f'{self.screenwidth}x{self.screenheight}')
-        self.root.config(bg='Gray')
-        self.font = ('Times New Roman', 14)
-        self.current = self.account_management_window
-        if os_name == "nt":
-            self.serial_check = 13
-        else: 
-            self.serial_check = 273
-        self.root.bind("<Configure>", self.resized)
-        self.account_management_window()
-
-    def close(self):
-        self.root.destroy()
-        self.super()
+    def __init__(self, name: str = "Account System", screenwidth: int = 400, screenhieght: int = 650) -> None:
+        super().__init__(name, screenwidth, screenhieght)
+        self.populate_window()
     
-    def clear_root(self) -> None:
-        for widget in self.root.winfo_children():
-            widget.destroy()
-
-    def place_exit_btn(self) -> None:
-        exit_btn = Button(self.root, text='EXIT', font=self.font, bg="Turquoise", command=self.close)
-        exit_btn.place(x=self.screenwidth-50, y=self.screenheight - 50, width=50, height=50)
-    
-    
-    def account_management_window(self) -> None:
-        self.current = self.account_management_window
+    def populate_window(self) -> None:
         title_label =Label(self.root, text="Account Manager", bg="Turquoise", font=('Times New Roman', 50))
         title_label.place(relx=0.5, rely=0.07, anchor=CENTER)
 
@@ -89,14 +64,6 @@ class AccountSystem:
         enter_btn.grid(row=3, column=1, pady=5, padx=12)
         register_frame.place(x=0, y=150, width=500, height=225)
         self.place_exit_btn()
-    
-    def resized(self, event) -> None:
-        """maintians proportions of widget placements when screen is resized"""
-        if event.widget == self.root and event.serial != self.serial_check:
-            self.screenwidth = self.root.winfo_width()
-            self.screenheight = self.root.winfo_height()
-            self.clear_root()
-            self.current()
 
 if __name__ == "__main__":
     account_system = AccountSystem()
