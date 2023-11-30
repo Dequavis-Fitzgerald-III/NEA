@@ -8,6 +8,9 @@ from PIL import ImageTk, Image
 from io import BytesIO
 from Clarkes_tkinter import Window
 
+class APIError(Exception):
+    pass 
+
 class RecipeFinder:
     def __init__(self) -> None:
         self.API = API(self)
@@ -98,6 +101,7 @@ class API:
         return data
         
     def random_parse(self, r) -> list:
+        self.status_check(r)
         data = []
         for i in range(2):
             name = r['recipes'][i]['title']
@@ -105,6 +109,11 @@ class API:
             image_url = get(r['recipes'][i]['image'])
             data.append([name, ID, image_url])
         return data
+
+    def status_check(self,r) -> bool:
+        if r['status'] == 'failure':
+            raise APIError("ran out of API points!")
+
     
         
 if __name__ == "__main__":

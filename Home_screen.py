@@ -3,7 +3,7 @@
 from tkinter import Label, Frame, Button, CENTER
 from PIL import ImageTk, Image
 from io import BytesIO
-from Recipe_Finder import RecipeFinder
+from Recipe_Finder import RecipeFinder, APIError
 from Account_System import AccountSystem
 from Clarkes_tkinter import ResizableWindow
 
@@ -14,7 +14,6 @@ class HomePage(ResizableWindow):
         self.recipe_finder = RecipeFinder()
         self.API = self.recipe_finder.API
         self.random_recipes_data = self.API.get_random_recipes_data()
-        
         # images:
         self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((self.screenwidth,int(5*self.screenheight/13))))
         self.menu_icon = ImageTk.PhotoImage(Image.open('VisualAssets/menu_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
@@ -76,6 +75,8 @@ class HomePage(ResizableWindow):
     def menu(self) -> None:
         """opens the menu bar at the top left of the home page"""
         print("open menu")
+        menu_frame = Frame(self.root, bg='magenta')
+        menu_frame.place(x=0, y=0, width=2*self.screenwidth/6, height=(7*self.screenheight/15))
         
     def search(self) -> None:
         """Opens the search bar at the top of the home page"""
