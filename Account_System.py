@@ -8,7 +8,8 @@ class AccountSystem(Window):
     """Creates a GUI allowing for account system with login and registration capabilities!"""
     def __init__(self, name: str = "Account System", screenwidth: int = 400, screenhieght: int = 650) -> None:
         super().__init__(name, screenwidth, screenhieght)
-    
+        self.populate_window()
+        
     def populate_window(self) -> None:
         title_label =Label(self.root, text="Account Manager", bg="Turquoise", font=('Times New Roman', 50))
         title_label.place(relx=0.5, rely=0.07, anchor=CENTER)
@@ -20,7 +21,7 @@ class AccountSystem(Window):
         Button(options_frame, text='Register', font=self.font, bg="Turquoise", command=self.register_window).grid(row=1, column=0)
         
         options_frame.place(relx=0.5, rely=0.5, width=self.screenwidth/2, height=self.screenheight/6, anchor=CENTER)
-        self.place_exit_btn()
+        self.place_control_bar()
 
     def login_window(self):
         self.current = self.login_window
@@ -35,7 +36,7 @@ class AccountSystem(Window):
         Button(login_frame, text='Login', bg="Turquoise", font=self.font).grid(row=3, column=1)
         Button(login_frame, text='Return', font=self.font, bg="Turquoise", command=lambda:[self.clear_root(), self.account_management_window()]).grid(row=4, column=0)
         login_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
-        self.place_exit_btn()
+        self.place_control_bar()
 
     def register_window(self):
         self.current = self.register_window
@@ -64,7 +65,7 @@ class AccountSystem(Window):
         pwd_again.grid(row=2, column=1, pady=3, padx=12)
         enter_btn.grid(row=3, column=1, pady=5, padx=12)
         register_frame.place(x=0, y=150, width=500, height=225)
-        self.place_exit_btn()
+        self.place_control_bar()
 
 if __name__ == "__main__":
     account_system = AccountSystem()
