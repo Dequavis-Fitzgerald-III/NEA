@@ -48,7 +48,7 @@ class RecipeFinderPage(Window):
         Label(image_frame, image=self.image).pack()
         image_frame.place(x=-2.5, y=-2.5, width=400, height=225)
         steps_frame = Frame(self.root, bg='light blue')
-        text_label = Label(steps_frame, text=data[0], font=self.font, wraplength=380, bg='white')
+        text_label = Label(steps_frame, text=f"Ingredients: {data[2]}\nInstructions:\n{data[0]}\nServes: {data[3]}", font=self.font, wraplength=380, bg='white')
         text_label.place(relx=0.5, rely=0.5, anchor=CENTER)
         steps_frame.place(x=0, y=225, width=400, height=425)  
 
@@ -96,12 +96,20 @@ class API:
         steps_string = ""
         for i, step in enumerate(steps):
             steps_string += f"{i+1}){step['step']} \n"
-        url = get(r['image'])
-        data = [steps_string, url]
+        image = get(r['image'])
+        ingredients = [[ingredient["name"], ingredient["measures"]["metric"]["amount"], ingredient["measures"]["metric"]["unitShort"]] for ingredient in r["extendedIngredients"]]
+        ingredients = set([f"{ingredient[0]}: {round(ingredient[1], 1)}{ingredient[2]}" for ingredient in ingredients])
+        ingredients_string = ""
+        for i, ingredient in enumerate(ingredients):
+            if i == len(ingredients) - 1:
+                ingredients_string += f"{ingredient}.\n"
+            else:
+                ingredients_string += f"{ingredient}, "
+        servings = r["servings"]
+        data = [steps_string, image, ingredients_string, servings]
         return data
         
     def random_parse(self, r) -> list:
-        self.status_check(r)
         data = []
         for i in range(2):
             name = r['recipes'][i]['title']
