@@ -11,7 +11,7 @@ class HomePage(ResizableWindow):
     """Creates a GUI system for the Foodie Findz APP (prototype)"""
     def __init__(self, name: str = "Home Page", screenwidth: int = 400, screenhieght: int = 650) -> None:
         super().__init__(name, screenwidth, screenhieght)
-        self.recipe_finder = RecipeFinder()
+        self.recipe_finder = RecipeFinder(self)
         self.API = self.recipe_finder.API
         self.random_recipes_data = self.API.get_random_recipes_data()
         # images:
@@ -84,13 +84,13 @@ class HomePage(ResizableWindow):
         
     def account(self) -> None:
         """Opens the accounts system"""
-        self.root.destroy()
-        account_page = AccountSystem()
+        self.root.withdraw()
+        account_page = AccountSystem(self)
         account_page.root.mainloop()
         
     def recipe(self) -> None:
         """Opens the recipe system"""
-        self.root.destroy()
+        self.root.withdraw()
         self.recipe_finder.create_page()
     
     def random(self, num) -> None:
@@ -99,7 +99,7 @@ class HomePage(ResizableWindow):
         self.recipe_finder.create_page()
         data = self.API.ID_parse(self.API.ID_search(self.random_recipes_data[num][1]))
         self.recipe_finder.page.visualise(data)
-    
+
 if __name__ == "__main__":
     home_page = HomePage()
     home_page.root.mainloop()

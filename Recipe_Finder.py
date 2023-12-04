@@ -12,8 +12,9 @@ class APIError(Exception):
     pass 
 
 class RecipeFinder:
-    def __init__(self) -> None:
+    def __init__(self, home) -> None:
         self.API = API(self)
+        self.home = home
     
     def create_page(self) -> None:
         self.page = RecipeFinderPage(self)
@@ -51,6 +52,10 @@ class RecipeFinderPage(Window):
         text_label = Label(steps_frame, text=f"Ingredients: {data[2]}\nInstructions:\n{data[0]}\nServes: {data[3]}", font=self.font, wraplength=380, bg='white')
         text_label.place(relx=0.5, rely=0.5, anchor=CENTER)
         steps_frame.place(x=0, y=225, width=400, height=425)  
+    
+    def window_exit(self) -> None:
+        self.root.destroy()
+        self.recipe_finder.home.root.deiconify()
 
 class API:
     """connects to the Spoonacular API to search for and parse data on recipes."""
