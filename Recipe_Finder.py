@@ -6,7 +6,7 @@ from pprint import pprint
 from json import dumps, load
 from PIL import ImageTk, Image
 from io import BytesIO
-from Clarkes_tkinter import Window
+from Clarkes_tkinter import SecondaryWindow
 
 class APIError(Exception):
     pass 
@@ -19,7 +19,7 @@ class RecipeFinder:
     def create_page(self) -> None:
         self.page = RecipeFinderPage(self)
 
-class RecipeFinderPage(Window):
+class RecipeFinderPage(SecondaryWindow):
     """Creates a GUI that connects to a Spoonacular API to recieve recipes and information."""
     def __init__(self, recipe_finder, name: str = "Recipe Page", screenwidth: int = 400, screenhieght: int = 650) -> None:
         super().__init__(name, screenwidth, screenhieght)
@@ -52,10 +52,6 @@ class RecipeFinderPage(Window):
         text_label = Label(steps_frame, text=f"Ingredients: {data[2]}\nInstructions:\n{data[0]}\nServes: {data[3]}", font=self.font, wraplength=380, bg='white')
         text_label.place(relx=0.5, rely=0.5, anchor=CENTER)
         steps_frame.place(x=0, y=225, width=400, height=425)  
-    
-    def window_exit(self) -> None:
-        self.root.destroy()
-        self.recipe_finder.home.root.deiconify()
 
 class API:
     """connects to the Spoonacular API to search for and parse data on recipes."""

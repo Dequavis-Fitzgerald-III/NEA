@@ -1,6 +1,6 @@
 """Custom tkinter library for quick and easy GUI creation"""
 
-from tkinter import Tk, Button, Frame, E
+from tkinter import Tk, Button, Frame, E, Toplevel
 from os import name as os_name
 if os_name == "nt":
     from messagebox import askyesno
@@ -52,3 +52,34 @@ class ResizableWindow(Window):
             self.screenheight = self.root.winfo_height()
             self.clear_root()
             self.populate_window()
+            
+class SecondaryWindow(Window):
+    def __init__(self, name:str, screenwidth:int = 400, screenhieght:int = 650) -> None:
+        self.root = Toplevel()
+        self.root.title(name)
+        self.screenwidth = screenwidth
+        self.screenheight = screenhieght
+        self.root.geometry(f'{self.screenwidth}x{self.screenheight}')
+        self.root.config(bg='Turquoise')
+        self.font = ('Times New Roman', 14)
+        self.root.protocol("WM_DELETE_WINDOW", self.window_exit)
+    
+    def window_exit(self) -> None:
+        self.root.destroy()
+        self.recipe_finder.home.root.deiconify()
+        
+class SecondaryResizableWindow(ResizableWindow):
+    def __init__(self, name:str, screenwidth:int = 400, screenhieght:int = 650) -> None:
+        self.root = Toplevel()
+        self.root.title(name)
+        self.screenwidth = screenwidth
+        self.screenheight = screenhieght
+        self.root.geometry(f'{self.screenwidth}x{self.screenheight}')
+        self.root.config(bg='Turquoise')
+        self.font = ('Times New Roman', 14)
+        self.root.protocol("WM_DELETE_WINDOW", self.window_exit)
+        self.root.bind("<Configure>", self.resized)
+    
+    def window_exit(self) -> None:
+        self.root.destroy()
+        self.recipe_finder.home.root.deiconify()

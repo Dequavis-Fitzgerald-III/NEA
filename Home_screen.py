@@ -11,20 +11,24 @@ class HomePage(ResizableWindow):
     """Creates a GUI system for the Foodie Findz APP (prototype)"""
     def __init__(self, name: str = "Home Page", screenwidth: int = 400, screenhieght: int = 650) -> None:
         super().__init__(name, screenwidth, screenhieght)
+        # creates a recipe finder class so that the API can be used to get random recipes.
         self.recipe_finder = RecipeFinder(self)
         self.API = self.recipe_finder.API
+        # stores the random recipe data collected from calling the get_random_recipes_data() method into a list attribute
         self.random_recipes_data = self.API.get_random_recipes_data()
-        # images:
-        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((self.screenwidth,int(5*self.screenheight/13))))
-        self.menu_icon = ImageTk.PhotoImage(Image.open('VisualAssets/menu_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
-        self.search_icon = ImageTk.PhotoImage(Image.open('VisualAssets/search_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
-        self.random_recipe1_img = Image.open(BytesIO(self.random_recipes_data[0][2].content)).resize(((int(7*self.screenwidth/20)),int((2*((7*self.screenheight/13)-25)/6))))
-        self.random_recipe1_img = ImageTk.PhotoImage(self.random_recipe1_img)
-        self.random_recipe2_img = Image.open(BytesIO(self.random_recipes_data[1][2].content)).resize(((int(7*self.screenwidth/20)),int((2*((7*self.screenheight/13)-25)/6))))
-        self.random_recipe2_img = ImageTk.PhotoImage(self.random_recipe2_img)
         
     def populate_window(self) -> None:
             """Creates all widgets for the home page GUI"""
+            
+            # images, crates tkinter photoimages. All are resized to proportional size compared to the window:
+            self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((self.screenwidth,int(5*self.screenheight/13))))
+            self.menu_icon = ImageTk.PhotoImage(Image.open('VisualAssets/menu_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
+            self.search_icon = ImageTk.PhotoImage(Image.open('VisualAssets/search_icon.png').resize((int(self.screenwidth/8),int(self.screenwidth/8))))
+            self.random_recipe1_img = Image.open(BytesIO(self.random_recipes_data[0][2].content)).resize(((int(7*self.screenwidth/20)),int((2*((7*self.screenheight/13)-25)/6))))
+            self.random_recipe1_img = ImageTk.PhotoImage(self.random_recipe1_img)
+            self.random_recipe2_img = Image.open(BytesIO(self.random_recipes_data[1][2].content)).resize(((int(7*self.screenwidth/20)),int((2*((7*self.screenheight/13)-25)/6))))
+            self.random_recipe2_img = ImageTk.PhotoImage(self.random_recipe2_img)
+            
             #Frames:
             home_frame = Frame(self.root, bg='light blue')
             home_frame.place(x=0, y=0, width=self.screenwidth, height=(5*self.screenheight/13))
@@ -55,13 +59,13 @@ class HomePage(ResizableWindow):
             search_btn = Button(self.root, image=self.search_icon, command=self.search)
             search_btn.place(x=(self.screenwidth-self.screenwidth/8), y=0, width=(self.screenwidth/8), height=(self.screenwidth/8))
             
-            acounts_btn = Button(functions_frame, text='accounts', font=self.font, bg="Turquoise", command=self.account)
+            acounts_btn = Button(functions_frame, text='accounts', font=('Times New Roman', int(self.screenheight/24)), bg="Turquoise", command=self.account)
             acounts_btn.place(relx=1/6, rely=0.5, anchor=CENTER)
             
-            recipe_btn = Button(functions_frame, text='recipe', font=self.font, bg="Turquoise", command=self.recipe)
+            recipe_btn = Button(functions_frame, text='recipe', font=('Times New Roman', int(self.screenheight/24)), bg="Turquoise", command=self.recipe)
             recipe_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
         
-            unknown_btn = Button(functions_frame, text='?', font=self.font, bg="Turquoise", command=self.recipe)
+            unknown_btn = Button(functions_frame, text='?', font=('Times New Roman', int(self.screenheight/24)), bg="Turquoise", command=self.recipe)
             unknown_btn.place(relx=5/6, rely=0.5, anchor=CENTER)
             
             random_recipe1_btn= Button(random_recipes_frame, image=self.random_recipe1_img, command=lambda:self.random(0))
@@ -95,7 +99,7 @@ class HomePage(ResizableWindow):
     
     def random(self, num) -> None:
         """Opens the recipe system onto the visualisation of the selected random recipe"""
-        self.root.destroy()
+        self.root.withdraw()
         self.recipe_finder.create_page()
         data = self.API.ID_parse(self.API.ID_search(self.random_recipes_data[num][1]))
         self.recipe_finder.page.visualise(data)

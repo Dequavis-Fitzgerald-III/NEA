@@ -2,9 +2,9 @@
 
 from tkinter import Tk, Label, Frame, Button, Entry, CENTER, messagebox
 from os import name as os_name
-from Clarkes_tkinter import Window, ResizableWindow
+from Clarkes_tkinter import SecondaryResizableWindow
 
-class AccountSystem(ResizableWindow):
+class AccountSystem(SecondaryResizableWindow):
     """Creates a GUI allowing for account system with login and registration capabilities!"""
     def __init__(self, home, name: str = "Account System", screenwidth: int = 400, screenhieght: int = 650) -> None:
         super().__init__(name, screenwidth, screenhieght)
