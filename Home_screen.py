@@ -78,9 +78,28 @@ class HomePage(ResizableWindow):
             
     def menu(self) -> None:
         """opens the menu bar at the top left of the home page"""
-        print("open menu")
+        # create a menu frame
         menu_frame = Frame(self.root, bg='magenta')
-        menu_frame.place(x=0, y=0, width=2*self.screenwidth/6, height=(7*self.screenheight/15))
+        menu_frame.place(x=0, y=0, width=(2*self.screenwidth/6), height=(7*self.screenheight/15))
+        
+        # place the title frame to add a title and exit button to close the menu
+        title_frame = Frame(menu_frame, bg= 'pink')
+        title_frame.place(x=0, y=0, width=(2*self.screenwidth/6), height=(self.screenheight/15))
+        title_label = Label(title_frame, text="Menu", bg='pink', font=('Times New Roman', int(self.screenheight/30)))
+        title_label.place(relx=0.6, rely=0.5, anchor=CENTER)
+        exit_btn = Button(title_frame, text='X', font=('Times New Roman', int(self.screenheight/30)), bg="pink", command=menu_frame.destroy)
+        exit_btn.place(relx=0.2, rely=0.5, anchor=CENTER, width=self.screenheight/20, height=self.screenheight/20)
+        
+        recipes_button = Button(menu_frame, text='Find recipes', font=self.font, bg="magenta", command=self.recipe)
+        recipes_button.place(x=0, y=(self.screenheight/15), width=(2*self.screenwidth/6), height=(2*self.screenheight/15))
+        recipes_button = Button(menu_frame, text='more options', font=self.font, bg="magenta", command=lambda: print("more options"))
+        recipes_button.place(x=0, y=(self.screenheight/5), width=(2*self.screenwidth/6), height=(2*self.screenheight/15))
+        accounts_button = Button(menu_frame, text='Account', font=self.font, bg="magenta", command=self.account)
+        accounts_button.place(x=0, y=(self.screenheight/3), width=(2*self.screenwidth/6), height=(self.screenheight/15))
+        settings_button = Button(menu_frame, text='Settings', font=self.font, bg="magenta", command=lambda: print("settings"))
+        settings_button.place(x=0, y=(2*self.screenheight/5), width=(2*self.screenwidth/6), height=(self.screenheight/15))
+        
+        
         
     def search(self) -> None:
         """Opens the search bar at the top of the home page"""
