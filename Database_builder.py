@@ -15,20 +15,18 @@ class Database:
         ''')
         self.conn.commit()
     
-    def create_recipes_table(self) -> None:
-        self.c.execute('''CREATE TABLE IF NOT EXISTS Recipes(
-                RecipeID INT NOT NULL PRIMARY KEY AUTOINCREMENT,
-                Name TEXT NOT NULL,
-                Calories INT NOT NULL
+    def create_cookbook_table(self) -> None:
+        self.c.execute('''CREATE TABLE IF NOT EXISTS Cookbook(
+                RecipeID INT NOT NULL PRIMARY KEY,
+                Name TEXT NOT NULL
             )
         ''')
         self.conn.commit()
     
     def create_pantry_table(self) -> None:
         self.c.execute('''CREATE TABLE IF NOT EXISTS Pantry(
-                IngredientID INT NOT NULL PRIMARY KEY AUTOINCREMENT,
-                Name TEXT NOT NULL,
-                
+                IngredientID INT NOT NULL PRIMARY KEY,
+                Name TEXT NOT NULL
             )
         ''')
         self.conn.commit()
@@ -36,7 +34,7 @@ class Database:
     def create_User_Recipes_table(self) -> None:
         self.c.execute('''CREATE TABLE IF NOT EXISTS User-Recipes(
                 FOREIGN KEY(UserID) REFERENCES Users(UserID)
-                FOREIGN KEY(RecipeID) REFERENCES Recipes(RecipeID)
+                FOREIGN KEY(RecipeID) REFERENCES Cookbook(RecipeID)
                 PRIMARY KEY (UserID, RecipeID)
             )   
         ''')

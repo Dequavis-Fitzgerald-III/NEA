@@ -16,7 +16,7 @@ class Window:
         self.screenheight = screenhieght
         self.root.geometry(f'{self.screenwidth}x{self.screenheight}')
         self.root.config(bg='Turquoise')
-        self.font = ('Times New Roman', 14)
+        self.font = ('Verdana', 14)
         self.root.protocol("WM_DELETE_WINDOW", self.window_exit)
     
     def clear_root(self) -> None:
@@ -61,7 +61,7 @@ class SecondaryWindow(Window):
         self.screenheight = screenhieght
         self.root.geometry(f'{self.screenwidth}x{self.screenheight}')
         self.root.config(bg='Turquoise')
-        self.font = ('Times New Roman', 14)
+        self.font = ('Verdana', 14)
         self.root.protocol("WM_DELETE_WINDOW", self.window_exit)
     
     def window_exit(self) -> None:
@@ -76,7 +76,7 @@ class SecondaryResizableWindow(ResizableWindow):
         self.screenheight = screenhieght
         self.root.geometry(f'{self.screenwidth}x{self.screenheight}')
         self.root.config(bg='Turquoise')
-        self.font = ('Times New Roman', 14)
+        self.font = ('Verdana', 14)
         self.root.protocol("WM_DELETE_WINDOW", self.window_exit)
         self.root.bind("<Configure>", self.resized)
     
