@@ -3,6 +3,7 @@
 from tkinter import Tk, Label, Frame, Button, Entry, CENTER, messagebox
 from os import name as os_name
 from Clarkes_tkinter import SecondaryResizableWindow
+from sqlite3 import connect
 
 class AccountSystem(SecondaryResizableWindow):
     """Creates a GUI allowing for account system with login and registration capabilities!"""
@@ -10,6 +11,8 @@ class AccountSystem(SecondaryResizableWindow):
         super().__init__(name, screenwidth, screenhieght)
         self.current = self.account_manager_window
         self.home = home
+        self.conn = connect("FoodieFindz_database.db")
+        self.c = self.conn.cursor()
         self.populate_window()
     
     def populate_window(self) -> None:
@@ -80,9 +83,17 @@ class AccountSystem(SecondaryResizableWindow):
         print(f"name: {self.name_entry.get()}, password: {self.password_entry.get()}")
         
     def register(self) -> None:
-        print(f"password: {self.reg_password_entry.get()}, repassword: {self.reg_password_reentry.get()}")
         if self.email_check() and self.name_check() and self.password_check():
-            print("welcome")
+            self.c.execute("INSERT INTO Users (Username, Password, Email) VALUES (:Username,:Password,:Email)",
+                  {
+                    'Username': self.reg_username_entry.get(),
+                    'Password': hash(self.reg_password_entry.get()),
+                    'Email': self.reg_email_entry.get()
+                    })
+            self.conn.commit()
+            messagebox.showinfo('confirmation', 'Record Saved')
+            self.clear_root()
+            self.account_manager_window()
             
     def email_check(self) -> bool:
         if "@" not in self.reg_email_entry.get():
@@ -105,10 +116,10 @@ class AccountSystem(SecondaryResizableWindow):
 
     def name_check(self) -> bool:
         if len(self.reg_username_entry.get()) < 2:
-            messagebox.showerror('Error', "Username too short!")
+            messagebox.showerror('Error', "Username must be between 2 and 24 characters!")
             return False
         if len(self.reg_username_entry.get()) > 24:
-            messagebox.showerror('Error', "Username too long!")
+            messagebox.showerror('Error', "sername must be between 2 and 24 characters!")
             return False
         return True
         
@@ -118,7 +129,7 @@ class AccountSystem(SecondaryResizableWindow):
             messagebox.showerror('Error', "Passwords don't match!")
             return
         if len(self.reg_password_entry.get()) < 8:
-            messagebox.showerror('Error', 'Password too short!')
+            messagebox.showerror('Error', 'Password must be greater than 8 characters!')
             return False
         if not any(c.isupper() for c in self.reg_password_entry.get()):
             messagebox.showerror('Error', 'Requires an upper case letter!')
@@ -130,7 +141,3 @@ class AccountSystem(SecondaryResizableWindow):
             messagebox.showerror('Error', 'Requires a special character!')
             return False
         return True
-    
-if __name__ == "__main__":
-    account_system = AccountSystem()
-    account_system.root.mainloop()

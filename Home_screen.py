@@ -65,8 +65,8 @@ class HomePage(ResizableWindow):
             recipe_btn = Button(functions_frame, text='recipe', font=('Verdana', int(self.screenheight/24)), bg="Turquoise", command=self.recipe)
             recipe_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
         
-            unknown_btn = Button(functions_frame, text='?', font=('Verdana', int(self.screenheight/24)), bg="Turquoise", command=self.recipe)
-            unknown_btn.place(relx=5/6, rely=0.5, anchor=CENTER)
+            pantry_btn = Button(functions_frame, text='Pantry', font=('Verdana', int(self.screenheight/24)), bg="Turquoise", command=self.pantry)
+            pantry_btn.place(relx=5/6, rely=0.5, anchor=CENTER)
             
             random_recipe1_btn= Button(random_recipes_frame, image=self.random_recipe1_img, command=lambda:self.random(0))
             random_recipe1_btn.place(relx=2/8, rely=3/10, anchor=CENTER, width=(7*self.screenwidth/20), height=(2*((7*self.screenheight/13)-25)/6))
@@ -117,6 +117,9 @@ class HomePage(ResizableWindow):
         self.root.withdraw()
         self.recipe_finder.create_page()
     
+    def pantry(self) -> None:
+        print("pantry")
+        
     def random(self, num) -> None:
         """Opens the recipe system onto the visualisation of the selected random recipe"""
         # Uses .withdraw() to hide the home page window instead of deleting it, allowing it to be reopened
