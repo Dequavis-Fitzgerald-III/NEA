@@ -4,6 +4,7 @@ from tkinter import Tk, Label, Frame, Button, Entry, CENTER, messagebox
 from os import name as os_name
 from Clarkes_tkinter import SecondaryResizableWindow
 from sqlite3 import connect
+from hashlib import sha256
 
 class AccountSystem(SecondaryResizableWindow):
     """Creates a GUI allowing for account system with login and registration capabilities!"""
@@ -80,14 +81,19 @@ class AccountSystem(SecondaryResizableWindow):
         self.place_control_bar()
 
     def login(self) -> None:
-        print(f"name: {self.name_entry.get()}, password: {self.password_entry.get()}")
+        for _ in self.c.execute("SELECT UserID FROM Users WHERE Username = ? AND Password = ?;", [self.name_entry.get(), sha256(self.password_entry.get().encode()).hexdigest()]):
+            messagebox.showinfo('confirmation', 'Logged in!')
+            self.window_exit()
+            break
+        else:
+            messagebox.showerror('Error', "Details are incorrect, please try again!")
         
     def register(self) -> None:
         if self.email_check() and self.name_check() and self.password_check():
             self.c.execute("INSERT INTO Users (Username, Password, Email) VALUES (:Username,:Password,:Email)",
                   {
                     'Username': self.reg_username_entry.get(),
-                    'Password': hash(self.reg_password_entry.get()),
+                    'Password': sha256(self.reg_password_entry.get().encode()).hexdigest(),
                     'Email': self.reg_email_entry.get()
                     })
             self.conn.commit()
@@ -96,6 +102,9 @@ class AccountSystem(SecondaryResizableWindow):
             self.account_manager_window()
             
     def email_check(self) -> bool:
+        for _ in self.c.execute("SELECT UserID FROM Users WHERE Email = ?;", [self.reg_email_entry.get()]):
+            messagebox.showerror('Error', "Email address is taken!")
+            return False
         if "@" not in self.reg_email_entry.get():
             messagebox.showerror('Error', "Email must be a valid email address!")
             return False
@@ -115,6 +124,9 @@ class AccountSystem(SecondaryResizableWindow):
         return True
 
     def name_check(self) -> bool:
+        for _ in self.c.execute("SELECT UserID FROM Users WHERE Username = ?;", [self.reg_username_entry.get()]):
+            messagebox.showerror('Error', "Username is taken!")
+            return False
         if len(self.reg_username_entry.get()) < 2:
             messagebox.showerror('Error', "Username must be between 2 and 24 characters!")
             return False
