@@ -12,6 +12,7 @@ class AccountSystem(SecondaryResizableWindow):
         super().__init__(name, screenwidth, screenhieght)
         self.current = self.account_manager_window
         self.home = home
+        self.current_user = None
         self.conn = connect("FoodieFindz_database.db")
         self.c = self.conn.cursor()
         self.populate_window()
@@ -81,7 +82,8 @@ class AccountSystem(SecondaryResizableWindow):
         self.place_control_bar()
 
     def login(self) -> None:
-        for _ in self.c.execute("SELECT UserID FROM Users WHERE Username = ? AND Password = ?;", [self.name_entry.get(), sha256(self.password_entry.get().encode()).hexdigest()]):
+        for ID in self.c.execute("SELECT UserID FROM Users WHERE Username = ? AND Password = ?;", [self.name_entry.get(), sha256(self.password_entry.get().encode()).hexdigest()]):
+            self.current_user = ID
             messagebox.showinfo('confirmation', 'Logged in!')
             self.window_exit()
             break

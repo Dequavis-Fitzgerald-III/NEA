@@ -103,13 +103,16 @@ class HomePage(ResizableWindow):
     def search(self) -> None:
         """Opens the search bar at the top of the home page"""
         print("open search bar")
+        try:
+            print(self.account_page.current_user[0])
+        except ValueError or AttributeError:
+            print("not signed in")
         
     def account(self) -> None:
         """Opens the accounts system"""
         # Uses .withdraw() to hide the home page window instead of deleting it, allowing it to be reopened
         self.root.withdraw()
-        account_page = AccountSystem(self)
-        account_page.root.mainloop()
+        self.account_page = AccountSystem(self)
         
     def recipe(self) -> None:
         """Opens the recipe system"""
