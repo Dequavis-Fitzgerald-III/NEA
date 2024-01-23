@@ -1,6 +1,6 @@
 """Account system with login and registration capabiities"""
 
-from tkinter import Tk, Label, Frame, Button, Entry, CENTER, messagebox
+from tkinter import Label, Frame, Button, Entry, CENTER, messagebox
 from os import name as os_name
 from Clarkes_tkinter import SecondaryResizableWindow
 from sqlite3 import connect

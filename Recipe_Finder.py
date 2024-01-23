@@ -40,7 +40,7 @@ class RecipeFinderPage(SecondaryWindow):
         enter_btn = Button(search_frame, text='search', bg="Turquoise", font=self.font, command=self.recipe_finder.API.search)
         enter_btn.grid(row=3, column=1, pady=10, padx=10)
         search_frame.place(x=0, y=150, width=500, height=225)
-        self.place_control_bar()   
+        self.place_control_bar()
 
     def visualise(self, data) -> None:
         """Visualizes results returned from a Spoonacular API request."""

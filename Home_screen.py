@@ -5,6 +5,7 @@ from PIL import ImageTk, Image
 from io import BytesIO
 from Recipe_Finder import RecipeFinder, APIError
 from Account_System import AccountSystem
+from Pantry import Pantry
 from Clarkes_tkinter import ResizableWindow
 
 class HomePage(ResizableWindow):
@@ -121,8 +122,9 @@ class HomePage(ResizableWindow):
         self.recipe_finder.create_page()
     
     def pantry(self) -> None:
-        print("pantry")
-        
+        self.root.withdraw()
+        self.pantry = Pantry(self)
+            
     def random(self, num) -> None:
         """Opens the recipe system onto the visualisation of the selected random recipe"""
         # Uses .withdraw() to hide the home page window instead of deleting it, allowing it to be reopened
