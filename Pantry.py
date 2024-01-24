@@ -36,7 +36,7 @@ class Pantry(SecondaryWindow):
         enter_btn.grid(row=1, column=1, pady=10, padx=10)
         for i, row in enumerate(self.c.execute("SELECT Pantry.Name, Pantry.IngredientID FROM Pantry INNER JOIN UserPantry, Users ON Pantry.IngredientID = UserPantry.IngredientID AND UserPantry.UserID = Users.UserID WHERE Users.UserID = ?", [self.current_user[0]])):
             Label(pantry_frame, text=f"{row[0]}", bg='Turquoise', font=self.font).grid(row=i, column=0)
-            Button(pantry_frame, text='Remove', font=self.font, bg="red", command=lambda:[self.remove_ingredient(row[1])]).grid(row=i, column=1)
+            Button(pantry_frame, text='Remove', font=self.font, bg="red", command=lambda:[self.remove_ingredient(row[1], row[0])]).grid(row=i, column=1)
         
         #Place:
         search_frame.place(x=0, y=0, width=400, height=325)
@@ -56,9 +56,11 @@ class Pantry(SecondaryWindow):
                 self.populate_window()
             else:
                 print("no")
+        print("none found")
         
-    def remove_ingredient(self, ingredientID) -> None:
-        self.c.execute("DELETE FROM UserPantry WHERE IngredientID = ? AND UserID = ?", [ingredientID, self.current_user[0]])
-        self.conn.commit()
+    def remove_ingredient(self, ingredientID, name) -> None:
+        print(ingredientID, name)
+        # self.c.execute("DELETE FROM UserPantry WHERE IngredientID = ? AND UserID = ?", [ingredientID, self.current_user[0]])
+        # self.conn.commit()
         self.clear_root()
         self.populate_window()
