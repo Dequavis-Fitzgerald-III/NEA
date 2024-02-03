@@ -3,6 +3,7 @@
 from tkinter import Label, Frame, Button, Entry, CENTER, messagebox
 from os import name as os_name
 from Clarkes_tkinter import SecondaryResizableWindow
+from PIL import ImageTk, Image
 from sqlite3 import connect
 from hashlib import sha256
 
@@ -10,7 +11,7 @@ class AccountSystem(SecondaryResizableWindow):
     """Creates a GUI allowing for account system with login and registration capabilities!"""
     def __init__(self, home, name: str = "Account System", screenwidth: int = 400, screenhieght: int = 650) -> None:
         super().__init__(name, screenwidth, screenhieght)
-        self.current = self.account_manager_window
+        self.current = self.login_window
         self.home = home
         self.current_user = None
         self.conn = connect("FoodieFindz_database.db")
@@ -23,28 +24,15 @@ class AccountSystem(SecondaryResizableWindow):
     def window_exit(self) -> None:
         self.root.destroy()
         self.home.root.deiconify()
-        
-    def account_manager_window(self) -> None:
-        self.current = self.account_manager_window
-        title_label = Label(self.root, text="Account Manager", bg="Light gray", font=('Times New Roman', int(self.screenheight/12)))
-        title_label.place(x=0, y=0, width=self.screenwidth, height=self.screenheight/10)
-        available_frame = Frame(self.root, bg='Turquoise')
-        available_frame.place(x=0, y=self.screenheight/10, width=self.screenwidth, height=(9*self.screenheight/10)-25)
-        options_frame = Frame(available_frame, bg='Turquoise')
-        
-        # buttons
-        Button(options_frame, text='Login', font=('Times New Roman', int(self.screenheight/6)), bg="Turquoise", command=self.login_window).grid(row=0, column=0)
-        Button(options_frame, text='Register', font=('Times New Roman', int(self.screenheight/6)), bg="Turquoise", command=self.register_window).grid(row=1, column=0)
-        
-        options_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
-        self.place_control_bar()
 
     def login_window(self):
         self.current = self.login_window
         self.clear_root()
+        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((self.screenwidth-5,int(5*self.screenheight/13))))
         login_font = ('Times New Roman', int(self.screenheight/29))
         title_label = Label(self.root, text="Enter login details", bg='Light gray', font=('Times New Roman', int(self.screenheight/12)))
         title_label.place(x=0, y=0, width=self.screenwidth, height=self.screenheight/10)
+        Label(self.root, image=self.home_pic).place(x=0, y=self.screenheight/10)
         login_frame = Frame(self.root, bg='light gray')
         Label(login_frame, text="Enter Name", bg='light gray', font=login_font).grid(row=0, column=0)
         Label(login_frame, text="Enter Password", bg='light gray', font=login_font).grid(row=1, column=0)
@@ -52,9 +40,11 @@ class AccountSystem(SecondaryResizableWindow):
         self.name_entry.grid(row=0, column=1)
         self.password_entry = Entry(login_frame, font=login_font, show='*')
         self.password_entry.grid(row=1, column=1)
-        Button(login_frame, text='Login', bg="Turquoise", font=self.font, command=self.login).grid(row=3, column=1)
+        Button(login_frame, text='Login', bg="Turquoise", font=login_font, command=self.login).grid(row=3, column=1)
         Button(login_frame, text='Return', font=login_font, bg="Turquoise", command=lambda:[self.clear_root(), self.account_manager_window()]).grid(row=4, column=0)
-        login_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+        login_frame.place(relx=0.5, rely=0.65, anchor=CENTER)
+        
+        register_button = Button(login_frame, text="Don't have an account?\n click to register", font=login_font, bg="Turquoise", command=self.register_window).grid(row=4, column=1)
         self.place_control_bar()
 
     def register_window(self):
@@ -77,7 +67,7 @@ class AccountSystem(SecondaryResizableWindow):
         self.reg_password_entry.grid(row=2, column=1)
         self.reg_password_reentry.grid(row=3, column=1)
         Button(register_frame, text='Register', bg="Turquoise", font=register_font, command=self.register).grid(row=4, column=1)
-        Button(register_frame, text='Return', font=register_font, bg="Turquoise", command=lambda:[self.clear_root(), self.account_manager_window()]).grid(row=4, column=0)
+        Button(register_frame, text='Return', font=register_font, bg="Turquoise", command=lambda:[self.clear_root(), self.login_window()]).grid(row=4, column=0)
         register_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
         self.place_control_bar()
 
