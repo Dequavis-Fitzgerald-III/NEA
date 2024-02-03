@@ -1,9 +1,8 @@
 """Pantry system for Foodie Findz app"""
 from tkinter import Frame, Button, Entry, messagebox, Label
-from os import name as os_name
 from sqlite3 import connect
 from Clarkes_tkinter import SecondaryWindow
-
+    
 class Pantry(SecondaryWindow):
     """Creates a Pantry GUI for the Foodie Findz app!"""
     def __init__(self, home, name: str = "Pantry", screenwidth: int = 400, screenhieght: int = 650) -> None:
@@ -36,7 +35,8 @@ class Pantry(SecondaryWindow):
         enter_btn.grid(row=1, column=1, pady=10, padx=10)
         for i, row in enumerate(self.c.execute("SELECT Pantry.Name, Pantry.IngredientID FROM Pantry INNER JOIN UserPantry, Users ON Pantry.IngredientID = UserPantry.IngredientID AND UserPantry.UserID = Users.UserID WHERE Users.UserID = ?", [self.current_user[0]])):
             Label(pantry_frame, text=f"{row[0]}", bg='Turquoise', font=self.font).grid(row=i, column=0)
-            Button(pantry_frame, text='Remove', font=self.font, bg="red", command=lambda:[self.remove_ingredient(row[1], row[0])]).grid(row=i, column=1)
+            newbutton = Button(pantry_frame, text='Remove', font=self.font, bg="red", command=lambda:self.remove_ingredient(row[1], row[0]))
+            newbutton.grid(row=i, column=1)
         
         #Place:
         search_frame.place(x=0, y=0, width=400, height=325)
@@ -44,7 +44,7 @@ class Pantry(SecondaryWindow):
         self.place_control_bar()
     
     def ingredient_search(self) -> None:
-        for row in self.c.execute("SELECT * FROM Pantry WHERE Name = ?;", [self.ingredient_entry.get()]):
+        for row in self.c.execute("SELECT * FROM Pantry WHERE Name LIKE ? LIMIT 5;", [str("%" + self.ingredient_entry.get() + "%")]):
             correct = messagebox.askyesno('Error', f"Is this the ingredient you were looking for:\n{row[1]}")
             if correct:
                 self.c.execute("INSERT INTO UserPantry (UserID, IngredientID) VALUES (:UserID,:IngredientID)",
@@ -52,6 +52,7 @@ class Pantry(SecondaryWindow):
                     'UserID': self.current_user[0],
                     'IngredientID': row[0]
                     })
+                self.conn.commit()
                 self.clear_root()
                 self.populate_window()
             else:
