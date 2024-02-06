@@ -13,7 +13,7 @@ class Pantry(SecondaryWindow):
             self.conn = connect("FoodieFindz_database.db")
             self.c = self.conn.cursor()
             self.populate_window()
-        except AttributeError:
+        except AttributeError or TypeError:
             messagebox.showerror('Error', "You must be logged in to use this feature")
             self.window_exit()
         

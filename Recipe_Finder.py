@@ -1,9 +1,8 @@
 """recipe searching for Foodie Findz app"""
 
-from tkinter import Label, Frame, Button, Entry, CENTER, scrolledtext, END, WORD
+from tkinter import Label, Frame, Button, Entry, CENTER, scrolledtext, END, WORD, messagebox
 from requests import get
-from pprint import pprint
-from json import dumps, load
+from json import JSONDecodeError
 from PIL import ImageTk, Image
 from io import BytesIO
 from Clarkes_tkinter import SecondaryWindow
@@ -30,16 +29,23 @@ class RecipeFinderPage(SecondaryWindow):
         
     def populate_window(self) -> None:
         """Creates all widgets for the recipe page GUI."""
-        search_frame = Frame(self.root, bd=2, bg='light blue', padx=0, pady=0)
-        self.query_entry = Entry(search_frame, font=self.font)
-        self.cuisine_entry = Entry(search_frame, font=self.font)
-        self.ingredients_entry = Entry(search_frame, font=self.font)
-        self.query_entry.grid(row=0, column=1, pady=5, padx=10)
-        self.cuisine_entry.grid(row=1, column=1, pady=5, padx=10)
-        self.ingredients_entry.grid(row=2, column=1, pady=5, padx=10)
-        enter_btn = Button(search_frame, text='search', bg="Turquoise", font=self.font, command=self.recipe_finder.API.search)
-        enter_btn.grid(row=3, column=1, pady=10, padx=10)
-        search_frame.place(x=0, y=150, width=500, height=225)
+        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((395,250)))
+        recipe_font = ('Times New Roman', int(650/29))
+        title_label = Label(self.root, text="Enter search criteria", bg='Light gray', font=('Times New Roman', 50))
+        title_label.place(x=0, y=0, width=400, height=65)
+        Label(self.root, image=self.home_pic).place(x=0, y=65)
+        search_frame = Frame(self.root, bg='light gray')
+        Label(search_frame, text="Enter query", bg='light gray', font=recipe_font).grid(row=0, column=0)
+        Label(search_frame, text="Enter cuisine", bg='light gray', font=recipe_font).grid(row=1, column=0)
+        Label(search_frame, text="Enter ingredients", bg='light gray', font=recipe_font).grid(row=2, column=0)
+        self.query_entry = Entry(search_frame, font=recipe_font)
+        self.query_entry.grid(row=0, column=1)
+        self.cuisine_entry = Entry(search_frame, font=recipe_font)
+        self.cuisine_entry.grid(row=1, column=1)
+        self.ingredients_entry = Entry(search_frame, font=recipe_font)
+        self.ingredients_entry.grid(row=2, column=1)
+        Button(search_frame, text='enter', bg="Turquoise", font=recipe_font, command=self.recipe_finder.API.search).grid(row=3, column=1)
+        search_frame.place(x=0, y=340, width=400, height=160)
         self.place_control_bar()
 
     def visualise(self, data) -> None:
@@ -69,10 +75,16 @@ class API:
     # searches:
     def search(self) -> None:
         """Makes a Spoonacular API search using given search criteria (from recipe page inputs) and visualises them on the recipe page."""
-        response = self.query_search()
-        response_id = self.recipe_parse(response)
-        data = self.ID_parse(self.ID_search(response_id))
-        self.recipe_finder.page.visualise(data)
+        try:
+            response = self.query_search()
+            response_id = self.recipe_parse(response)
+            data = self.ID_parse(self.ID_search(response_id))
+            self.recipe_finder.page.visualise(data)
+        except JSONDecodeError:
+            messagebox.showerror('Error', "NO RESULTS FOUND")
+            self.recipe_finder.page.clear_root()
+            self.recipe_finder.page.populate_window()
+            
     
     def get_random_recipes_data(self) -> list:
         """Finds and parses 2 random recipes from the spoonacular API.

@@ -41,10 +41,8 @@ class AccountSystem(SecondaryResizableWindow):
         self.password_entry = Entry(login_frame, font=login_font, show='*')
         self.password_entry.grid(row=1, column=1)
         Button(login_frame, text='Login', bg="Turquoise", font=login_font, command=self.login).grid(row=3, column=1)
-        Button(login_frame, text='Return', font=login_font, bg="Turquoise", command=lambda:[self.clear_root(), self.account_manager_window()]).grid(row=4, column=0)
+        Button(login_frame, text="Don't have an account?\n click to register", font=login_font, bg="Turquoise", command=self.register_window).grid(row=4, column=1)
         login_frame.place(relx=0.5, rely=0.65, anchor=CENTER)
-        
-        register_button = Button(login_frame, text="Don't have an account?\n click to register", font=login_font, bg="Turquoise", command=self.register_window).grid(row=4, column=1)
         self.place_control_bar()
 
     def register_window(self):
