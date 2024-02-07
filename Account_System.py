@@ -28,7 +28,7 @@ class AccountSystem(SecondaryResizableWindow):
     def login_window(self):
         self.current = self.login_window
         self.clear_root()
-        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((self.screenwidth-5,int(5*self.screenheight/13))))
+        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/account_picture.png').resize((self.screenwidth-5,int(5*self.screenheight/13))))
         login_font = ('Times New Roman', int(self.screenheight/29))
         title_label = Label(self.root, text="Enter login details", bg='Light gray', font=('Times New Roman', int(self.screenheight/12)))
         title_label.place(x=0, y=0, width=self.screenwidth, height=self.screenheight/10)

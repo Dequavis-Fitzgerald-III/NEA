@@ -29,7 +29,7 @@ class RecipeFinderPage(SecondaryWindow):
         
     def populate_window(self) -> None:
         """Creates all widgets for the recipe page GUI."""
-        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/home_picture.png').resize((395,250)))
+        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/recipe_picture.png').resize((395,250)))
         recipe_font = ('Times New Roman', int(650/29))
         title_label = Label(self.root, text="Enter search criteria", bg='Light gray', font=('Times New Roman', 50))
         title_label.place(x=0, y=0, width=400, height=65)

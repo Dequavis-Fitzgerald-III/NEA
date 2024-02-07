@@ -2,6 +2,7 @@
 from tkinter import Frame, Button, Entry, messagebox, Label
 from sqlite3 import connect
 from Clarkes_tkinter import SecondaryWindow
+from PIL import ImageTk, Image
     
 class Pantry(SecondaryWindow):
     """Creates a Pantry GUI for the Foodie Findz app!"""
@@ -22,25 +23,30 @@ class Pantry(SecondaryWindow):
         self.home.root.deiconify()
         
     def populate_window(self):
+        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/pantry_picture.png').resize((395,250)))
+        pantry_font = ('Times New Roman', int(650/29))
+        title_label = Label(self.root, text="Pantry", bg='Light gray', font=('Times New Roman', 50))
+        title_label.place(x=0, y=0, width=400, height=65)
+        Label(self.root, image=self.home_pic).place(x=0, y=65)
         # Frames:
-        search_frame = Frame(self.root, bd=2, bg='light blue', padx=0, pady=0)
+        search_frame = Frame(self.root, bd=2, bg='light gray', padx=0, pady=0)
         pantry_frame = Frame(self.root, bd=2, bg='light blue', padx=0, pady=0)
         
         # Entries:
-        self.ingredient_entry = Entry(search_frame, font=self.font)
-        self.ingredient_entry.grid(row=0, column=1, pady=5, padx=10)
+        self.ingredient_entry = Entry(search_frame, font=pantry_font)
+        self.ingredient_entry.grid(row=0, column=0, pady=5, padx=10)
         
         # buttons:
-        enter_btn = Button(search_frame, text='search', bg="Turquoise", font=self.font, command=self.ingredient_search)
-        enter_btn.grid(row=1, column=1, pady=10, padx=10)
+        enter_btn = Button(search_frame, text='search', bg="Turquoise", font=pantry_font, command=self.ingredient_search)
+        enter_btn.grid(row=0, column=1, pady=10, padx=10)
         for i, row in enumerate(self.c.execute("SELECT Pantry.Name, Pantry.IngredientID FROM Pantry INNER JOIN UserPantry, Users ON Pantry.IngredientID = UserPantry.IngredientID AND UserPantry.UserID = Users.UserID WHERE Users.UserID = ?", [self.current_user[0]])):
-            Label(pantry_frame, text=f"{row[0]}", bg='Turquoise', font=self.font).grid(row=i, column=0)
-            new_button = Button(pantry_frame, text=f'Remove{row[0]}', font=self.font, bg="red", command=lambda:self.remove_ingredient(row[1]))
+            Label(pantry_frame, text=f"{row[0]}", bg='Turquoise', font=pantry_font).grid(row=i, column=0)
+            new_button = Button(pantry_frame, text=f'Remove {row[0]}', font=pantry_font, bg="red", command=lambda:self.remove_ingredient(row[1]))
             new_button.grid(row=i, column=1)
             
         #Place:
-        search_frame.place(x=0, y=0, width=400, height=325)
-        pantry_frame.place(x=0, y=325, width=400, height=325)
+        search_frame.place(x=0, y=315, width=400, height=50)
+        pantry_frame.place(x=0, y=365, width=400, height=285)
         self.place_control_bar()
     
     def ingredient_search(self) -> None:
