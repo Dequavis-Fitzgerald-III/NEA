@@ -31,12 +31,15 @@ class HomePage(ResizableWindow):
             self.random_recipe2_img = ImageTk.PhotoImage(self.random_recipe2_img)
             
             #Frames:
+            # holds image and the menu/search buttons
             home_frame = Frame(self.root, bg='light blue')
             home_frame.place(x=0, y=0, width=self.screenwidth, height=(5*self.screenheight/13))
             
+            # holds all home screen buttons
             functions_frame = Frame(self.root, bg='purple')
             functions_frame.place(x=0, y=(5*self.screenheight/13), width=self.screenwidth, height=(self.screenheight/13))
             
+            # holds the random recipe pictures and descriptions
             random_recipes_frame = Frame(self.root, bg='Turquoise')
             random_recipes_frame.place(x=0, y=(6*self.screenheight/13), width=self.screenwidth, height=((7*self.screenheight/13)-25))
 
@@ -104,10 +107,6 @@ class HomePage(ResizableWindow):
     def search(self) -> None:
         """Opens the search bar at the top of the home page"""
         print("open search bar")
-        try:
-            print(self.account_page.current_user[0])
-        except ValueError or AttributeError:
-            print("not signed in")
         
     def account(self) -> None:
         """Opens the accounts system"""
@@ -122,6 +121,7 @@ class HomePage(ResizableWindow):
         self.recipe_finder.create_page()
     
     def pantry(self) -> None:
+        # Uses .withdraw() to hide the home page window instead of deleting it, allowing it to be reopened
         self.root.withdraw()
         self.pantry = Pantry(self)
             

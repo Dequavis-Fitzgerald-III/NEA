@@ -29,12 +29,17 @@ class RecipeFinderPage(SecondaryWindow):
         
     def populate_window(self) -> None:
         """Creates all widgets for the recipe page GUI."""
+        # resizes the image to place on top of the screen
         self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/recipe_picture.png').resize((395,250)))
         recipe_font = ('Times New Roman', int(650/29))
+        # places a title at the top of the screen
         title_label = Label(self.root, text="Enter search criteria", bg='Light gray', font=('Times New Roman', 50))
         title_label.place(x=0, y=0, width=400, height=65)
         Label(self.root, image=self.home_pic).place(x=0, y=65)
+        # creates a frame to store search criteria entries
         search_frame = Frame(self.root, bg='light gray')
+        # adds entries for user to enter the search criteria
+        # all entries and their labels are gridded to make the layout clean and ordered
         Label(search_frame, text="Enter query", bg='light gray', font=recipe_font).grid(row=0, column=0)
         Label(search_frame, text="Enter cuisine", bg='light gray', font=recipe_font).grid(row=1, column=0)
         Label(search_frame, text="Enter ingredients", bg='light gray', font=recipe_font).grid(row=2, column=0)
@@ -44,6 +49,7 @@ class RecipeFinderPage(SecondaryWindow):
         self.cuisine_entry.grid(row=1, column=1)
         self.ingredients_entry = Entry(search_frame, font=recipe_font)
         self.ingredients_entry.grid(row=2, column=1)
+        # pressing the enter button calls the API to search
         Button(search_frame, text='enter', bg="Turquoise", font=recipe_font, command=self.recipe_finder.API.search).grid(row=3, column=1)
         search_frame.place(x=0, y=340, width=400, height=160)
         self.place_control_bar()
@@ -60,7 +66,7 @@ class RecipeFinderPage(SecondaryWindow):
         Label(image_frame, image=self.image).pack()
         image_frame.place(x=-2.5, y=-2.5, width=400, height=225)
         steps_frame = Frame(self.root, bg='light blue')
-        # formats text onto the page
+        # formats text onto the page, scrolled text is used so that the user can scroll through the data and all text fits on the screen
         text_label = scrolledtext.ScrolledText(steps_frame, font=self.font, wrap=WORD, bg='white')
         text_label.insert(END, recipe_info_text)
         text_label.place(relx=0.5, rely=0.5, anchor=CENTER, width = 380)
@@ -75,6 +81,7 @@ class API:
     # searches:
     def search(self) -> None:
         """Makes a Spoonacular API search using given search criteria (from recipe page inputs) and visualises them on the recipe page."""
+        # uses a try and except block to handle an error when the search criteria returns no recipe results
         try:
             response = self.query_search()
             response_id = self.recipe_parse(response)
@@ -187,7 +194,9 @@ class API:
             list: a simplified list of the data from the recipe.
         """
         data = []
+        # iterates through both results
         for i in range(2):
+            # gets out the name, id and image from the random results and adds them to a list to be sent elsewhere in the program
             name: str = r['recipes'][i]['title']
             ID: int = r['recipes'][i]['id']
             image_url = get(r['recipes'][i]['image'])
@@ -195,5 +204,6 @@ class API:
         return data
 
     def status_check(self,r:dict) -> bool:
+        # currently unused - but it was a way of raising an error when the user ran out of API points meaning they had made too nany searches
         if r['status'] == 'failure':
             raise APIError("ran out of API points!")
