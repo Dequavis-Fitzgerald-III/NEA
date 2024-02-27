@@ -6,6 +6,7 @@ from json import JSONDecodeError
 from PIL import ImageTk, Image
 from io import BytesIO
 from Clarkes_tkinter import SecondaryWindow
+from sqlite3 import connect
 
 class APIError(Exception):
     pass 
@@ -49,17 +50,29 @@ class RecipeFinderPage(SecondaryWindow):
         self.cuisine_entry.grid(row=1, column=1)
         self.ingredients_entry = Entry(search_frame, font=recipe_font)
         self.ingredients_entry.grid(row=2, column=1)
+        # pressing the autofill button adds all pantry ingredients to the ingredient entry
+        Button(search_frame, text='Autofill Ingredients', bg="Turquoise", font=recipe_font, command=self.autofill_ingredients).grid(row=3, column=0)
         # pressing the enter button calls the API to search
         Button(search_frame, text='enter', bg="Turquoise", font=recipe_font, command=self.recipe_finder.API.search).grid(row=3, column=1)
         search_frame.place(x=0, y=340, width=400, height=160)
         self.place_control_bar()
-
+    
+    def autofill_ingredients(self):
+        try:
+            self.current_user = self.recipe_finder.home.account_page.current_user
+            self.conn = connect("FoodieFindz_database.db")
+            self.c = self.conn.cursor()
+            for name in (self.c.execute("SELECT Pantry.Name FROM Pantry INNER JOIN UserPantry, Users ON Pantry.IngredientID = UserPantry.IngredientID AND UserPantry.UserID = Users.UserID WHERE Users.UserID = ?", [self.current_user[0]])):
+                self.ingredients_entry.insert(0, f"{name[0]}, ")
+        except AttributeError or TypeError:
+            messagebox.showerror('Error', "You must be logged in to use this feature")
+    
     def visualise(self, data) -> None:
         """Visualizes results returned from a Spoonacular API request."""
         self.clear_root()
-        recipe_info_text = f"Ingredients:\n{data[2]}\nInstructions:\n{data[0]}\nServes: {data[3]}"
+        recipe_info_text = f"{data[0]}\nIngredients:\n{data[3]}\nInstructions:\n{data[1]}\nServes: {data[4]}"
         # resizes image and makes it a type usable by tkinter
-        parsed_image = Image.open(BytesIO(data[1].content)).resize((400,225))
+        parsed_image = Image.open(BytesIO(data[2].content)).resize((400,225))
         self.image = ImageTk.PhotoImage(parsed_image)
         # creates and populates frames and labels
         image_frame = Frame(self.root, bg='light blue')
@@ -159,6 +172,8 @@ class API:
         Returns:
             list: a simplified list of the data from the recipe.
         """
+        # Name:
+        name: str = r['title']
         # Steps:
         steps_list = r["analyzedInstructions"][0]["steps"]
         steps: str = ""
@@ -181,7 +196,7 @@ class API:
                 ingredients += f"{ingredient}, "
         # Servings:
         servings: int = r["servings"]
-        data = [steps, image, ingredients, servings]
+        data = [name, steps, image, ingredients, servings]
         return data
         
     def random_parse(self, r:dict) -> list:
