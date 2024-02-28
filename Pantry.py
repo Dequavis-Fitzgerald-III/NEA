@@ -26,17 +26,17 @@ class Pantry(SecondaryWindow):
     def populate_window(self):
         """Creates all widgets for the pantry page GUI."""
         # resizes the image to place on top of the screen
-        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/pantry_picture.png').resize((395,250)))
+        self.pantry_pic = ImageTk.PhotoImage(Image.open('VisualAssets/pantry_picture.png').resize((395,250)))
         pantry_font = ('Times New Roman', int(650/29))
         # places a title at the top of the screen
         title_label = Label(self.root, text="Pantry", bg='Light gray', font=('Times New Roman', 50))
         title_label.place(x=0, y=0, width=400, height=65)
-        Label(self.root, image=self.home_pic).place(x=0, y=65)
+        Label(self.root, image=self.pantry_pic).place(x=0, y=65)
         # Frames:
         # stores the entry box that allows the user to find ingredients to add to their pantry
         search_frame = Frame(self.root, bd=2, bg='light gray', padx=0, pady=0)
         # stores the pantry ingredients - displaying to the user what ingredients they have and allowing them to be removed
-        pantry_frame = Frame(self.root, bd=2, bg='light blue', padx=0, pady=0)
+        pantry_frame = Frame(self.root, bd=2, bg='light gray', padx=0, pady=0)
         
         # Entries:
         self.ingredient_entry = Entry(search_frame, font=pantry_font)
@@ -48,17 +48,19 @@ class Pantry(SecondaryWindow):
         
         # searches the database for what is in the pantry of the current user
         # iterates through the results creating buttons to place on the screen
+        num_of_ingredients = 0
         for i, row in enumerate(self.c.execute("SELECT Pantry.Name, Pantry.IngredientID FROM Pantry INNER JOIN UserPantry, Users ON Pantry.IngredientID = UserPantry.IngredientID AND UserPantry.UserID = Users.UserID WHERE Users.UserID = ?", [self.current_user[0]])):
             # uses the name to create a label and grids it onto the screen
-            Label(pantry_frame, text=f"{row[0]}", bg='Turquoise', font=pantry_font).grid(row=i, column=0)
+            Label(pantry_frame, text=f"{row[0]}", bg='light gray', font=pantry_font).grid(row=i, column=0)
             # creates a button to remove the ingredient and grids it to the screen.
             # this button calls the remove_ingredient method which takes in an ingredient ID and removes it from the current user's pantry
-            new_button = Button(pantry_frame, text=f'Remove {row[0]}', font=pantry_font, bg="red", command=lambda:self.remove_ingredient(row[1]))
+            new_button = Button(pantry_frame, text=f'Remove', font=pantry_font, bg="red", width = 10, command=lambda:self.remove_ingredient(row[1]))
             new_button.grid(row=i, column=1)
+            num_of_ingredients += 1
             
         #Place:
-        search_frame.place(x=0, y=315, width=400, height=50)
-        pantry_frame.place(x=0, y=365, width=400, height=285)
+        search_frame.place(x=0, y=340, width=400, height=50)
+        pantry_frame.place(x=0, y=390, width=400, height=num_of_ingredients * 35)
         self.place_control_bar()
     
     def add_ingredient(self) -> None:

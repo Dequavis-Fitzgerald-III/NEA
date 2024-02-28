@@ -30,12 +30,12 @@ class AccountSystem(SecondaryResizableWindow):
         self.current = self.login_window
         self.clear_root()
         # resizes the image to place on top of the screen
-        self.home_pic = ImageTk.PhotoImage(Image.open('VisualAssets/account_picture.png').resize((self.screenwidth-5,int(5*self.screenheight/13))))
+        self.login_pic = ImageTk.PhotoImage(Image.open('VisualAssets/account_picture.png').resize((self.screenwidth-5,int(5*self.screenheight/13))))
         login_font = ('Times New Roman', int(self.screenheight/29))
         # places a title at the top of the screen
         title_label = Label(self.root, text="Enter login details", bg='Light gray', font=('Times New Roman', int(self.screenheight/12)))
         title_label.place(x=0, y=0, width=self.screenwidth, height=self.screenheight/10)
-        Label(self.root, image=self.home_pic).place(x=0, y=self.screenheight/10)
+        Label(self.root, image=self.login_pic).place(x=0, y=self.screenheight/10)
         # creates a frame to store all the buttons, labels and entries
         login_frame = Frame(self.root, bg='light gray')
         # adds entries for the users' name and password and grids them
