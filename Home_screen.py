@@ -50,10 +50,10 @@ class HomePage(ResizableWindow):
             title = Label(random_recipes_frame, text="Why Not Try!:", font=self.font, bg="light blue")
             title.place(relx=0.5, rely=0.05, anchor=CENTER)
             
-            random_recipe1_text = Label(random_recipes_frame, text=f"{self.random_recipes_data[0][0]} TRY IT!", font=self.font, wraplength=((7*self.screenwidth/20)-20), bg="light blue")
+            random_recipe1_text = Label(random_recipes_frame, text=f"{self.random_recipes_data[0][0]}, TRY IT!", font=self.font, wraplength=((7*self.screenwidth/20)-20), bg="light blue")
             random_recipe1_text.place(relx=5/8, rely=3/10, anchor=CENTER, width=(7*self.screenwidth/20), height=(2*((7*self.screenheight/13)-25)/6))
             
-            random_recipe2_text = Label(random_recipes_frame, text=f"{self.random_recipes_data[1][0]} TRY IT!", font=self.font, wraplength=((7*self.screenwidth/20)-20), bg="light blue")
+            random_recipe2_text = Label(random_recipes_frame, text=f"{self.random_recipes_data[1][0]}, TRY IT!", font=self.font, wraplength=((7*self.screenwidth/20)-20), bg="light blue")
             random_recipe2_text.place(relx=3/8, rely=7/10, anchor=CENTER, width=(7*self.screenwidth/20), height=(2*((7*self.screenheight/13)-25)/6))
             
             # buttons:

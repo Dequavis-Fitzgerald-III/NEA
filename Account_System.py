@@ -163,8 +163,8 @@ class AccountSystem(SecondaryResizableWindow):
         if self.reg_password_entry.get() != self.reg_password_reentry.get():
             messagebox.showerror('Error', "Passwords don't match!")
             return
-        # ensures that the password is long enough
-        if len(self.reg_password_entry.get()) < 8:
+        # ensures that the password is between 8 - 12 characters
+        if len(self.reg_password_entry.get()) < 8 or len(self.reg_password_entry.get()) > 12:
             messagebox.showerror('Error', 'Password must be greater than 8 characters!')
             return False
         # ensures that the password contains an upper case letter 

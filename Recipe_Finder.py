@@ -70,7 +70,7 @@ class RecipeFinderPage(SecondaryWindow):
     def visualise(self, data) -> None:
         """Visualizes results returned from a Spoonacular API request."""
         self.clear_root()
-        recipe_info_text = f"{data[0]}\nIngredients:\n{data[3]}\nInstructions:\n{data[1]}\nServes: {data[4]}"
+        recipe_info_text = f"{data[0]}:\n\nIngredients:\n{data[3]}\nInstructions:\n{data[1]}\nServes: {data[4]}"
         # resizes image and makes it a type usable by tkinter
         parsed_image = Image.open(BytesIO(data[2].content)).resize((400,225))
         self.image = ImageTk.PhotoImage(parsed_image)
