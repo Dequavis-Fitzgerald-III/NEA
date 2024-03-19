@@ -1,6 +1,6 @@
 """recipe searching for Foodie Findz app"""
 
-from tkinter import Label, Frame, Button, Entry, CENTER, scrolledtext, END, WORD, messagebox
+from tkinter import Label, Frame, Button, Entry, CENTER, scrolledtext, END, WORD, messagebox, OptionMenu, StringVar
 from requests import get
 from json import JSONDecodeError
 from PIL import ImageTk, Image
@@ -44,17 +44,24 @@ class RecipeFinderPage(SecondaryWindow):
         Label(search_frame, text="Enter query", bg='light gray', font=recipe_font).grid(row=0, column=0)
         Label(search_frame, text="Enter cuisine", bg='light gray', font=recipe_font).grid(row=1, column=0)
         Label(search_frame, text="Enter ingredients", bg='light gray', font=recipe_font).grid(row=2, column=0)
+        Label(search_frame, text="Enter serving size", bg='light gray', font=recipe_font).grid(row=3, column=0)
         self.query_entry = Entry(search_frame, font=recipe_font)
         self.query_entry.grid(row=0, column=1)
         self.cuisine_entry = Entry(search_frame, font=recipe_font)
         self.cuisine_entry.grid(row=1, column=1)
         self.ingredients_entry = Entry(search_frame, font=recipe_font)
         self.ingredients_entry.grid(row=2, column=1)
+        self.selected_option = StringVar()
+        self.selected_option.set("N/A")
+        options = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
+        self.number_entry = OptionMenu(search_frame, self.selected_option, *options)
+        self.number_entry['direction'] = 'above'
+        self.number_entry.grid(row=3, column=1)
         # pressing the autofill button adds all pantry ingredients to the ingredient entry
-        Button(search_frame, text='Autofill Ingredients', bg="Turquoise", font=recipe_font, command=self.autofill_ingredients).grid(row=3, column=0)
+        Button(search_frame, text='Autofill Ingredients', bg="Turquoise", font=recipe_font, command=self.autofill_ingredients).grid(row=4, column=0)
         # pressing the enter button calls the API to search
-        Button(search_frame, text='enter', bg="Turquoise", font=recipe_font, command=self.recipe_finder.API.search).grid(row=3, column=1)
-        search_frame.place(x=0, y=340, width=400, height=160)
+        Button(search_frame, text='enter', bg="Turquoise", font=recipe_font, command=self.recipe_finder.API.search).grid(row=4, column=1)
+        search_frame.place(x=0, y=340, width=400, height=185)
         self.place_control_bar()
     
     def autofill_ingredients(self):
@@ -186,7 +193,12 @@ class API:
         # creates a 2 dimensional list of ingredients including the name of the ingredient as well as both the amount and metric used for the amount.
         ingredients_list = [[ingredient["name"], ingredient["measures"]["metric"]["amount"], ingredient["measures"]["metric"]["unitShort"]] for ingredient in r["extendedIngredients"]]
         # creats a set to remove duplicates, also rounds the amount to remove unnecasarely long numbers.
-        ingredients_list = set([f"{ingredient[0]}: {round(ingredient[1], 1)}{ingredient[2]}" for ingredient in ingredients_list])
+        guests = self.recipe_finder.page.selected_option.get()
+        if guests == "N/A":
+            ingredients_list = set([f"{ingredient[0]}: {round(ingredient[1], 1)}{ingredient[2]}" for ingredient in ingredients_list])
+        else:
+            coefficient: float = int(guests) / int(r["servings"])
+            ingredients_list = set([f"{ingredient[0]}: {((round((coefficient) * float(ingredient[1]), 1)))}{ingredient[2]}" for ingredient in ingredients_list])
         ingredients: str = ""
         # iterates through the ingredients set formating them into a string that can be visualised.
         for i, ingredient in enumerate(ingredients_list):
@@ -196,6 +208,8 @@ class API:
                 ingredients += f"{ingredient}, "
         # Servings:
         servings: int = r["servings"]
+        if guests != "N/A":
+            servings = guests
         data = [name, steps, image, ingredients, servings]
         return data
         

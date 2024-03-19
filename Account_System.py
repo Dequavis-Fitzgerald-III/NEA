@@ -110,7 +110,7 @@ class AccountSystem(SecondaryResizableWindow):
             messagebox.showinfo('confirmation', 'Record Saved')
             # user is sent back to the login screen after being told that they have been added to the database
             self.clear_root()
-            self.account_manager_window()
+            self.login_window()
             
     def email_check(self) -> bool:
         """Validates that the users entered email fits the criteria"""
@@ -165,18 +165,18 @@ class AccountSystem(SecondaryResizableWindow):
             return
         # ensures that the password is between 8 - 12 characters
         if len(self.reg_password_entry.get()) < 8 or len(self.reg_password_entry.get()) > 12:
-            messagebox.showerror('Error', 'Password must be greater than 8 characters!')
+            messagebox.showerror('Error', 'Password must be between 8 and 12 characters!')
             return False
         # ensures that the password contains an upper case letter 
         if not any(c.isupper() for c in self.reg_password_entry.get()):
-            messagebox.showerror('Error', 'Requires an upper case letter!')
+            messagebox.showerror('Error', 'Password requires an upper case letter!')
             return False
         # ensures that the password contains a number
         if not any(c.isdigit() for c in self.reg_password_entry.get()):
-            messagebox.showerror('Error', 'Requires a digit!')
+            messagebox.showerror('Error', 'Password requires a digit!')
             return False
         # ensures that the password contains a special character
         if not any(c in special_characters for c in self.reg_password_entry.get()):
-            messagebox.showerror('Error', 'Requires a special character!')
+            messagebox.showerror('Error', 'Password requires a special character!')
             return False
         return True
